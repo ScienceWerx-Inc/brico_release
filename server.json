@@ -1,0 +1,29 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ScienceWerx-Inc/brico",
+  "title": "BRICO feature memory",
+  "description": "Find features you built in other projects, see how they fit this one, and reuse them.",
+  "version": "0.2.1",
+  "websiteUrl": "https://www.bricowerx.com",
+  "repository": {
+    "url": "https://github.com/ScienceWerx-Inc/brico_release",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "bricowerx",
+      "version": "0.2.1",
+      "transport": { "type": "stdio" },
+      "packageArguments": [{ "type": "positional", "value": "mcp" }],
+      "environmentVariables": [
+        {
+          "name": "BRICO_TOKEN",
+          "description": "Your BRICO Builder invite token (bt_…). Optional if you ran `brico login`.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

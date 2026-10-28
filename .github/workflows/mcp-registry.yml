@@ -1,0 +1,35 @@
+name: MCP registry
+
+# Lists server.json in the MCP registry as io.github.ScienceWerx-Inc/brico.
+# It runs here rather than in the source repository because Actions are free
+# on public repositories; the registry trusts this workflow's OIDC token for
+# the org's namespace because ScienceWerx-Inc owns this repository too.
+#
+# Run it by hand after `npm publish`, with server.json copied from the source
+# repository: the registry checks that the npm package it names exists and
+# that its mcpName matches.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish server.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check the npm package exists
+        run: |
+          version=$(jq -r .version server.json)
+          pkg=$(jq -r '.packages[0].identifier' server.json)
+          [ "$(jq -r '.packages[0].version' server.json)" = "$version" ] || { echo "server.json versions disagree"; exit 1; }
+          npm view "$pkg@$version" version
+          [ "$(npm view "$pkg@$version" mcpName)" = "$(jq -r .name server.json)" ] || { echo "mcpName on npm does not match server.json"; exit 1; }
+      - name: Install mcp-publisher
+        run: curl -fsSL https://github.com/modelcontextprotocol/registry/releases/download/v1.8.6/mcp-publisher_linux_amd64.tar.gz | tar xz mcp-publisher
+      - run: ./mcp-publisher login github-oidc
+      - run: ./mcp-publisher publish

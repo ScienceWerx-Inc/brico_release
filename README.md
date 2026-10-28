@@ -29,3 +29,7 @@ Cursor, in `~/.cursor/mcp.json`:
 ```
 
 Every release includes `SHA256SUMS.txt`; the installers verify downloads against it.
+
+## MCP registry
+
+`server.json` is the server's [MCP registry](https://registry.modelcontextprotocol.io) entry, `io.github.ScienceWerx-Inc/brico`. After each npm release, copy it from the source repository and run **Actions → MCP registry → Run workflow**.
